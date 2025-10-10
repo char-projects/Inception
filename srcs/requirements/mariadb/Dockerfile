@@ -1,11 +1,14 @@
 FROM alpine:3.21
 
-RUN apk add --no-cache mariadb-server
+RUN apk update && apk upgrade
+RUN apk add mariadb mariadb-client
 
-COPY ./tools/requirements/mariadb/script.sh /tmp/script.sh
-RUN chmod +x /tmp/script.sh
-RUN sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY ./tools/script.sh .
+RUN chmod +x /script.sh
 
-ENTRYPOINT ["bash", "/tmp/script.sh"]
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-CMD ["mysqld_safe"]
+RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
+RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+
+ENTRYPOINT ["/bin/sh", "./script.sh"]

@@ -1,11 +1,15 @@
 #!/bin/bash
-/etc/init.d/mariadb start
 
-/usr/bin/mariadb -u${mysql_root_user} -p${mysql_root_password} -e "CREATE DATABASE IF NOT EXISTS ${database_name};"
-/usr/bin/mariadb -u${mysql_root_user} -p${mysql_root_password} -e "CREATE USER '${mysql_user}'@'%' IDENTIFIED BY '${mysql_password}';"
-/usr/bin/mariadb -u${mysql_root_user} -p${mysql_root_password} -e "GRANT ALL PRIVILEGES ON ${database_name}.* TO '${mysql_user}'@'%';"
-/usr/bin/mariadb -u${mysql_root_user} -p${mysql_root_password} -e "ALTER USER '${mysql_root_user}'@'localhost' IDENTIFIED BY '${mysql_root_password}';"
-/usr/bin/mariadb -u${mysql_root_user} -p${mysql_root_password} -e "FLUSH PRIVILEGES;"
-/usr/bin/mariadb-admin -u${mysql_root_user} -p${mysql_root_password} shutdown
+MYSQL_ROOT_USER="${MYSQL_ROOT_USER:-root}"
+MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-}"
+DATABASE_NAME="${DATABASE_NAME:-}"
+MYSQL_USER="${MYSQL_USER:-}"
+MYSQL_PASSWORD="${MYSQL_PASSWORD:-}"
 
-exec "$@"
+service mariadb start && \
+    echo "CREATE DATABASE IF NOT EXISTS ${DATABASE_NAME} ;" > maria.sql && \
+    echo "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}' ;" >> maria.sql && \
+    echo "GRANT ALL PRIVILEGES ON ${DATABASE_NAME}.* TO '${MYSQL_USER}'@'%' ;" >> maria.sql && \
+    echo "FLUSH PRIVILEGES;" >> maria.sql && \
+    echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}' ;" >> maria.sql && \
+    mariadb < maria.sql

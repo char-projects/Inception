@@ -1,14 +1,27 @@
-FROM alpine:3.21
+FROM debian:bookworm
 
-RUN apk update && apk upgrade
-RUN apk add mariadb mariadb-client
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ARG MYSQL_ROOT_USER
+ARG MYSQL_ROOT_PASSWORD
+ARG DATABASE_NAME
 
-COPY ./tools/script.sh .
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+ENV MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+ENV DATABASE_NAME=${DATABASE_NAME}
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y mariadb-server
+
+COPY ./tools/script.sh /script.sh
 RUN chmod +x /script.sh
 
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
 RUN mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql
-RUN mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 
-ENTRYPOINT ["/bin/sh", "./script.sh"]
+RUN ./script.sh
+
+CMD ["mysqld"]

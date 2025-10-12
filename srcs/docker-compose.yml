@@ -7,12 +7,7 @@ volumes:
     #   o: bind 
     #   type: none   
   mariadb:
-    name: mariadb
     driver: local
-    driver_opts:
-      device: ${PWD}/srcs/requirements/mariadb
-      o: bind
-      type: none
 
 networks:
   inception:
@@ -44,7 +39,15 @@ services:
   #     - inception
   #   restart: always
   mariadb:
-    build: ./requirements/mariadb/.
+    build: 
+        args:
+          - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
+          - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+          - MYSQL_USER=${MYSQL_USER}
+          - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+          - DATABASE_NAME=${DATABASE_NAME}
+        context: ./requirements/mariadb/.
+        dockerfile: Dockerfile
     container_name: mariadb
     volumes:
       - mariadb:/var/lib/mysql

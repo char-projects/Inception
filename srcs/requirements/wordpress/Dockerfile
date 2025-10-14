@@ -1,16 +1,18 @@
 FROM debian:bookworm
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y wget php php-fpm php-mysql
+RUN apt-get update && \
+	apt-get upgrade -y && \
+	apt-get install -y wget php8.2 php8.2-fpm php8.2-mysql php8.2-cli php8.2-curl php8.2-xml php8.2-gd php8.2-mbstring curl sendmail php-mail && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+RUN echo "<html><body><h1>It works!</h1></body></html>" > /var/www/html/index.html
+
+COPY ./conf/php.conf /etc/php/8.2/fpm/pool.d/php.conf
+RUN mkdir -p /var/run/php && chown -R www-data:www-data /var/run/php
 
 COPY ./tools/script.sh /script.sh
 RUN chmod +x /script.sh
 
-COPY ./conf/php.conf /etc/php/8.2/fpm/pool.d/php.conf
-RUN mkdir -p /var/run/php && chown -R www-data:www-data /var/run/php
-RUN wget https://wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz
-RUN tar -xzf /tmp/wordpress.tar.gz -C /var/www/html --strip-components=1
-RUN chown -R www-data:www-data /var/www/html
-
-EXPOSE 9000
-CMD ["php-fpm8.2", "-F"]
+CMD ["/script.sh"]

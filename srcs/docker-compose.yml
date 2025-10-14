@@ -39,6 +39,8 @@ services:
           - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
           - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
           - MYSQL_USER=${MYSQL_USER}
+          - MYSQL_USER_EMAIL=${MYSQL_USER_EMAIL}
+          - MYSQL_HOST=${MYSQL_HOST}
           - MYSQL_PASSWORD=${MYSQL_PASSWORD}
           - DATABASE_NAME=${DATABASE_NAME}
         context: ./requirements/mariadb/.

@@ -1,9 +1,3 @@
-volumes:
-  wordpress:
-    driver: local  
-  mariadb:
-    driver: local
-
 networks:
   inception:
     name: inception
@@ -12,12 +6,12 @@ services:
   nginx:
     build: ./requirements/nginx/.
     container_name: nginx
-    ports:
-        - "443:443"
     depends_on:
       - wordpress
     volumes:
-      - wordpress:/var/www/html
+      - ./web:/var/www/html
+    ports:
+        - "443:443"
     networks:
       - inception
     restart: always
@@ -27,7 +21,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wordpress:/var/www/html
+      - ./web:/var/www/html
     env_file:
       - .env
     networks:
@@ -47,7 +41,7 @@ services:
         dockerfile: Dockerfile
     container_name: mariadb
     volumes:
-      - mariadb:/var/lib/mysql
+      - ./db:/var/lib/mysql
     env_file:
       - .env
     networks:

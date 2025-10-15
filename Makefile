@@ -1,15 +1,20 @@
 all:
 	docker compose -f ./srcs/docker-compose.yml up --build
 
-vol:
-	docker compose -f ./srcs/docker-compose.yml down --volumes
-
 down:
 	docker compose -f ./srcs/docker-compose.yml down
 
+clean:
+	docker compose -f ./srcs/docker-compose.yml down --volumes
+
+fclean: clean
+	docker system prune -af
+	docker volume prune -f
+	sudo rm -rf srcs/web srcs/db
+
 re:
 	make down
-	make vol
+	make fclean
 	make all
 
-.PHONY: all down vol re
+.PHONY: all down clean fclean re

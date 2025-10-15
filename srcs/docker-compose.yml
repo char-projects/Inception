@@ -6,6 +6,11 @@ services:
   nginx:
     build: ./requirements/nginx/.
     container_name: nginx
+<<<<<<< HEAD
+=======
+    ports:
+        - "8443:443"
+>>>>>>> parent of da2b635 (made localhost:443 work)
     depends_on:
       - wordpress
     volumes:

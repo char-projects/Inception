@@ -16,8 +16,9 @@ ENV MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
 ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 ENV DATABASE_NAME=${DATABASE_NAME}
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y mariadb-server
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y mariadb-server && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY ./tools/script.sh /script.sh
 RUN chmod +x /script.sh

@@ -15,18 +15,18 @@ services:
   #   networks:
   #     - inception
   #   restart: always
-  # wordpress:
-  #   build: ./requirements/wordpress/.
-  #   container_name: wordpress
-  #   depends_on:
-  #     - mariadb
-  #   volumes:
-  #     - ./web:/var/www/html
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - inception
-  #   restart: always
+  wordpress:
+    build: ./requirements/wordpress/.
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - ./web:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
   mariadb:
     build: ./requirements/mariadb/.
     container_name: mariadb

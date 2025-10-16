@@ -3,47 +3,32 @@ networks:
     name: inception
 
 services:
-  nginx:
-    build: ./requirements/nginx/.
-    container_name: nginx
-<<<<<<< HEAD
-=======
-    ports:
-        - "8443:443"
->>>>>>> parent of da2b635 (made localhost:443 work)
-    depends_on:
-      - wordpress
-    volumes:
-      - ./web:/var/www/html
-    ports:
-        - "443:443"
-    networks:
-      - inception
-    restart: always
-  wordpress:
-    build: ./requirements/wordpress/.
-    container_name: wordpress
-    depends_on:
-      - mariadb
-    volumes:
-      - ./web:/var/www/html
-    env_file:
-      - .env
-    networks:
-      - inception
-    restart: always
+  # nginx:
+  #   build: ./requirements/nginx/.
+  #   container_name: nginx
+  #   ports:
+  #       - "443:443"
+  #   depends_on:
+  #     - wordpress
+  #   volumes:
+  #     - ./web:/var/www/html
+  #   networks:
+  #     - inception
+  #   restart: always
+  # wordpress:
+  #   build: ./requirements/wordpress/.
+  #   container_name: wordpress
+  #   depends_on:
+  #     - mariadb
+  #   volumes:
+  #     - ./web:/var/www/html
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - inception
+  #   restart: always
   mariadb:
-    build: 
-        args:
-          - MYSQL_ROOT_USER=${MYSQL_ROOT_USER}
-          - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-          - MYSQL_USER=${MYSQL_USER}
-          - MYSQL_USER_EMAIL=${MYSQL_USER_EMAIL}
-          - MYSQL_HOST=${MYSQL_HOST}
-          - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-          - DATABASE_NAME=${DATABASE_NAME}
-        context: ./requirements/mariadb/.
-        dockerfile: Dockerfile
+    build: ./requirements/mariadb/.
     container_name: mariadb
     volumes:
       - ./db:/var/lib/mysql

@@ -42,8 +42,14 @@ services:
       - .env
     networks:
       - inception
+    ports:
+        - "3306:3306"
     restart: always
   
 volumes:
   webdata:
     driver: local
+    driver_opts:
+      type: none
+      device: ./www
+      o: bind

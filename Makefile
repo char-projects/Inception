@@ -10,8 +10,7 @@ clean:
 fclean: clean
 	docker system prune -af
 	docker volume prune -f
-	sudo rm -rf srcs/web srcs/db srcs/www/
-	mkdir srcs/www
+	sudo rm -rf srcs/web srcs/db
 
 re:
 	make down

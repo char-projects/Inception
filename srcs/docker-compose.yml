@@ -3,32 +3,38 @@ networks:
     name: inception
 
 services:
-  # nginx:
-  #   build: ./requirements/nginx/.
-  #   container_name: nginx
-  #   ports:
-  #       - "443:443"
-  #   depends_on:
-  #     - wordpress
-  #   volumes:
-  #     - ./web:/var/www/html
-  #   networks:
-  #     - inception
-  #   restart: always
+  nginx:
+    build:
+      context: ..
+      dockerfile: srcs/requirements/nginx/Dockerfile
+    container_name: nginx
+    ports:
+        - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - webdata:/var/www/html
+    networks:
+      - inception
+    restart: always
   wordpress:
-    build: ./requirements/wordpress/.
+    build:
+      context: ..
+      dockerfile: srcs/requirements/wordpress/Dockerfile
     container_name: wordpress
     depends_on:
       - mariadb
     volumes:
-      - ./web:/var/www/html
+      - webdata:/var/www/html
     env_file:
       - .env
     networks:
       - inception
     restart: always
   mariadb:
-    build: ./requirements/mariadb/.
+    build:
+      context: ..
+      dockerfile: srcs/requirements/mariadb/Dockerfile
     container_name: mariadb
     volumes:
       - ./db:/var/lib/mysql
@@ -37,3 +43,7 @@ services:
     networks:
       - inception
     restart: always
+  
+volumes:
+  webdata:
+    driver: local

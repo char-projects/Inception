@@ -6,11 +6,12 @@ RUN apt-get install -y mariadb-server
 RUN mkdir -m 2750 /var/log/mysql
 RUN chown mysql /var/log/mysql
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY ./tools/script.sh /etc/mysql/script.sh
-RUN chown -R mysql:mysql /var/lib/mysql
+RUN mkdir -p /var/lib/mysql && \
+    chown -R mysql:mysql /var/lib/mysql && \
+    chmod 755 /var/lib/mysql
+
+COPY srcs/requirements/mariadb/conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY srcs/requirements/mariadb/tools/script.sh /etc/mysql/script.sh
 RUN chmod +x /etc/mysql/script.sh
-RUN find /var/lib/mysql -type d -exec chmod 750 {} + || true
-RUN find /var/lib/mysql -type f -exec chmod 640 {} + || true
 
 CMD ["/etc/mysql/script.sh"]

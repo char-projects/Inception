@@ -9,4 +9,6 @@ COPY srcs/requirements/wordpress/conf/php.conf /etc/php/8.2/fpm/pool.d/php.conf
 COPY srcs/requirements/wordpress/tools/script.sh /script.sh
 RUN chmod +x /script.sh
 
+RUN rm -f /etc/php/8.2/fpm/pool.d/www.conf
+
 CMD ["/script.sh"]

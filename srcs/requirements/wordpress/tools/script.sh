@@ -21,7 +21,5 @@ wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$WP_ADMIN
 wp user create "$MYSQL_USER" "$MYSQL_USER_EMAIL" --user_pass="$MYSQL_PASSWORD" --role=author --allow-root
 
 chown -R www-data:www-data /var/www/html
-find /var/www/html -type d -exec chmod 755 {} +
-find /var/www/html -type f -exec chmod 644 {} +
 
 exec php-fpm8.2 -y /etc/php/8.2/fpm/php-fpm.conf -F

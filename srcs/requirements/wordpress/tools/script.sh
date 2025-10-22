@@ -1,9 +1,13 @@
 #!/bin/bash
-set -e
 
-mkdir -p /var/www/html
+if [ ! -f /var/www/html/wp-config.php ]; then
+	if ! [ -d /var/www/html ]; then
+		mkdir -p /var/www/html
+	fi
+
+
 cd /var/www/html
-rm -rf *
+
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 
 chmod +x wp-cli.phar 
 mv wp-cli.phar /usr/local/bin/wp
@@ -19,6 +23,8 @@ sed -i "s/localhost/$DB_HOST/g" wp-config.php
 
 wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$WP_ADMIN" --admin_password="$WP_ADMIN_PASS" --admin_email="$WP_ADMIN_EMAIL" --skip-email --allow-root
 wp user create "$MYSQL_USER" "$MYSQL_USER_EMAIL" --user_pass="$MYSQL_PASSWORD" --role=editor --allow-root
+
+fi
 
 chown -R www-data:www-data /var/www/html
 

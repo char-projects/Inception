@@ -17,7 +17,5 @@ RUN chmod 644 /etc/nginx/ssl/nginx.crt
 RUN chown -R www-data:www-data /etc/nginx/ssl
 
 RUN mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html
-RUN find /var/www/html -type d -exec chmod 755 {} \;
-RUN find /var/www/html -type f -exec chmod 644 {} \;
 
 CMD ["nginx", "-g", "daemon off;"]

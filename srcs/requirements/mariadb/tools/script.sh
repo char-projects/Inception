@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+
 
 mkdir -p /etc/mysql
 chown mysql:mysql /etc/mysql || true

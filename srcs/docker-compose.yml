@@ -1,6 +1,20 @@
 networks:
   inception:
-    name: inception
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/db
+      o: bind
+  web:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/web
+      o: bind
 
 services:
   nginx:
@@ -13,7 +27,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - ./web:/var/www/html
+      - web:/var/www/html
     networks:
       - inception
     restart: always
@@ -25,7 +39,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ./web:/var/www/html
+      - web:/var/www/html
     env_file:
       - .env
     networks:
@@ -37,7 +51,7 @@ services:
       dockerfile: srcs/requirements/mariadb/Dockerfile
     container_name: mariadb
     volumes:
-      - ./db:/var/lib/mysql
+      - db:/var/lib/mysql
     env_file:
       - .env
     networks:

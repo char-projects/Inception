@@ -18,7 +18,7 @@ sed -i "s/password_here/$MYSQL_PASSWORD/g" wp-config.php
 sed -i "s/localhost/$DB_HOST/g" wp-config.php
 
 wp core install --url="$DOMAIN_NAME" --title="$WP_TITLE" --admin_user="$WP_ADMIN" --admin_password="$WP_ADMIN_PASS" --admin_email="$WP_ADMIN_EMAIL" --skip-email --allow-root
-wp user create "$MYSQL_USER" "$MYSQL_USER_EMAIL" --user_pass="$MYSQL_PASSWORD" --role=author --allow-root
+wp user create "$MYSQL_USER" "$MYSQL_USER_EMAIL" --user_pass="$MYSQL_PASSWORD" --role=editor --allow-root
 
 chown -R www-data:www-data /var/www/html
 
